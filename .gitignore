@@ -1,0 +1,8 @@
+# Auto-build files
+# bin/build/*
+
+# Env file
+# project/.env
+
+# Todo file
+# doc/TODO.md
