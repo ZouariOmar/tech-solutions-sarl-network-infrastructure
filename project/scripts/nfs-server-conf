@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# =========================================
+# .FILE
+#   nfs-server-conf
+#
+# .SYNOPSIS
+#   Bash script to configure NFS-Linux server
+#
+# .DESCRIPTION
+#   I write this script for
+#   `Linux kvm 5.4.0-29-generic #33-Ubuntu SMP Wed Apr 29 14:32:27 UTC 2020 x86_64 x86_64 GNU/Linux`
+#
+# .PARAMETER NONE
+#   NONE
+#
+# .INPUTS
+#   NONE
+#
+# .OUTPUTS
+#   NONE
+#
+# .NOTES
+#   Version       : 1.0
+#   Author        : @ZouariOmar <zouariomar20@gmail.com>
+#   Created       : 11/22/2025
+#   Change Log    : d58f0c1
+#
+# .EXAMPLE
+#   ./nfs-server-conf
+# =========================================
+
+# CUSTOM CONFIGURATION PART
+NET_INTERFACE="eth0"
+NET_ADDRESS="X.X.X.X/24"
+NET_GW="X.X.X.X"
+NET_DNS_SERVERS="[8.8.8.8]"
+
+# Set keymap into fr
+loadkeys fr
+
+# Set the private static ip address
+sudo bash -c "cat << 'EOF' > /etc/netplan/01-static.yaml
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ${NET_INTERFACE}:
+      dhcp4: no
+      addresses:
+        - ${NET_ADDRESS}
+      gateway4: ${NET_GW}
+      nameservers:
+        addresses: ${NET_DNS_SERVERS}
+EOF"
+
+# Applay changes
+sudo netplan apply
+
+# Restart networf service
+# sudo systemctl restart networking
