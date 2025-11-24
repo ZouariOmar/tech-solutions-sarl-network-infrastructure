@@ -1,10 +1,10 @@
 <!-- PROJECT SHIELDS -->
 
-[![Contributors](https://img.shields.io/badge/CONTRIBUTORS-01-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/graphs/contributors)
+[![Contributors](https://img.shields.io/badge/CONTRIBUTORS-02-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/graphs/contributors)
 [![Forks](https://img.shields.io/badge/FORKS-00-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/network/members)
 [![Stargazers](https://img.shields.io/badge/STARS-01-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/stargazers)
 [![Issues](https://img.shields.io/badge/ISSUES-00-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/issues)
-[![MIT License](https://img.shields.io/badge/LICENSE-GPL-blue?style=plastic)](LICENSE)
+[![GPL License](https://img.shields.io/badge/LICENSE-GPL-blue?style=plastic)](LICENSE)
 [![Linkedin](https://img.shields.io/badge/Linkedin-6.2k-blue?style=plastic)](https://www.linkedin.com/in/zouari-omar-143239283)
 
 <h1 align="center">
@@ -55,19 +55,19 @@ This project is designed to simulate realistic network environments for educatio
 
 Before you begin, make sure you have the following software installed:
 
-- GNS3: Download and install GNS3
-- Cisco Router ([Cisco 3725](https://drive.google.com/file/d/1Q8i5ApabSRYu0QCmtyK2NzcmUWKuiWMD/view?usp=drive_link)) and Switch Images: Make sure you have valid IOS images for Cisco devices to run the simulation.
-- Operating System: This setup is compatible with Windows, Linux, and MacOS.
+- GNS3: Download and install GNS3(V3.0.5)
+- Cisco Router ([Cisco 3725](https://drive.google.com/file/d/1Q8i5ApabSRYu0QCmtyK2NzcmUWKuiWMD/view?usp=drive_link))
+- Linux Server ([QEMU-linux-ubuntu-server-20.04](https://cloud-images.ubuntu.com/releases/focal/release))
 
 ### Setup the project
 
 - Clone the repo to your local machine
 
 ```bash
-git clone <https://github.com/Gl3diator/Projet-Systeme-et-Reseau-GNS3.git>
+git clone https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure.git
 ```
 
-- Open GNS3, choose `file/open project` option with
+- Open GNS3, choose `file/Import project` than select:
 
 ```bash
 tech-solutions-sarl-network-infrastructure/project/tech-solutions-sarl-network-infrastructure.gns3project
