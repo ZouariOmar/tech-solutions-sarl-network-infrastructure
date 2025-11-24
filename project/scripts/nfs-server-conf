@@ -31,12 +31,13 @@
 
 # CUSTOM CONFIGURATION PART
 NET_INTERFACE="eth0"
-NET_ADDRESS="X.X.X.X/24"
+NET_ADDRESS="X.X.X.X/XX"
 NET_GW="X.X.X.X"
-NET_DNS_SERVERS="[8.8.8.8]"
+NET_DNS_SERVERS="[X.X.X.X]"
 
 # Set keymap into fr
-loadkeys fr
+# loadkeys fr # Set keymap into fr temporary
+sudo sed -i 's/XKBLAYOUT=".*"/XKBLAYOUT="fr"/' /etc/default/keyboard
 
 # Set the private static ip address
 sudo bash -c "cat << 'EOF' > /etc/netplan/01-static.yaml
@@ -55,6 +56,3 @@ EOF"
 
 # Applay changes
 sudo netplan apply
-
-# Restart networf service
-# sudo systemctl restart networking
