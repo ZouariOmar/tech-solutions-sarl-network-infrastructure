@@ -1,0 +1,232 @@
+\documentclass[12pt,a4paper]{article}
+
+% -------------------------------------------------------------
+% PACKAGES
+% -------------------------------------------------------------
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\usepackage{tabularx}
+
+\geometry{margin=1in}
+\setlength{\headheight}{15pt}
+% -------------------------------------------------------------
+% COLORS — Corporate Slate Theme
+% -------------------------------------------------------------
+\definecolor{slate}{HTML}{2F3A45}
+\definecolor{accent}{HTML}{4A6572}
+\definecolor{soft}{HTML}{ECEFF1}
+
+% -------------------------------------------------------------
+% SECTION STYLE
+% -------------------------------------------------------------
+\titleformat{\section}
+  {\Large\bfseries\color{slate}}
+  {\thesection}{1em}{}
+
+\titleformat{\subsection}
+  {\large\bfseries\color{accent}}
+  {\thesubsection}{1em}{}
+
+% -------------------------------------------------------------
+% HEADER / FOOTER
+% -------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textcolor{slate}{Tech Solutions (SARL) — Network Infrastructure}}
+\rhead{\textcolor{slate}{\thepage}}
+
+% -------------------------------------------------------------
+% TITLE PAGE
+% -------------------------------------------------------------
+\begin{document}
+
+\begin{titlepage}
+    \centering
+
+    \vspace*{2cm}
+    \includegraphics[width=0.55\linewidth]{../../img/CORE/sarl.png}
+
+    \vfill
+
+    {\Huge\bfseries Network Infrastructure Architecture Report \\[0.5cm]}
+    {\Large Tech Solutions (SARL)}\\[1.2cm]
+
+    {\large Version 1.0 — \today}\\[0.5cm]
+
+    \vfill
+\end{titlepage}
+
+\newpage
+
+% -------------------------------------------------------------
+% EXECUTIVE SUMMARY
+% -------------------------------------------------------------
+\section*{Executive Summary}
+
+This document provides a complete professional overview of the network infrastructure designed for Tech Solutions (SARL). 
+The architecture simulates a modern enterprise network using GNS3, featuring routed backbone segments, VLAN segmentation, firewall policies, and Linux-based services.
+
+The objective is to model a scalable, secure, and realistic environment for engineering,
+training, and testing purposes.  
+It provides system engineers and network architects with a clear understanding of the network's logical and physical design, implementation steps, and operational considerations.
+
+\newpage
+
+% -------------------------------------------------------------
+% TABLE OF CONTENTS
+% -------------------------------------------------------------
+\tableofcontents
+\newpage
+
+% -------------------------------------------------------------
+% 1. INTRODUCTION
+% -------------------------------------------------------------
+\section{Introduction}
+
+The Tech Solutions (SARL) network architecture project is a fully simulated enterprise environment developed within GNS3. It includes multi-router infrastructure, departmental VLANs, dynamic routing, and server resources.
+
+The purpose of this report is to present:
+
+\begin{itemize}
+  \item network design principles,
+  \item device roles and interconnections,
+  \item used technologies and protocols,
+  \item deployment and implementation steps,
+  \item configuration and testing methodology.
+\end{itemize}
+
+\newpage
+
+% -------------------------------------------------------------
+% 2. NETWORK OVERVIEW
+% -------------------------------------------------------------
+\subsection{Departmental Allocation and Logical Topology}
+
+After the integration of the Internet service, the ISP allocated the address space \textbf{172.24.0.0/14} to the enterprise.  
+The logical topology and IP allocation for each department are summarized below:
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{3cm}|
+                            >{\raggedright\arraybackslash}p{2cm}|
+                            >{\raggedright\arraybackslash}p{2.5cm}|
+                            >{\raggedright\arraybackslash}p{2cm}|
+                            >{\raggedright\arraybackslash}X|}
+\hline
+\textbf{Department} & \textbf{Local Router} & \textbf{Service / VM} & \textbf{PC Clients} & \textbf{Role in the Enterprise} \\
+\hline
+Web / Marketing & RZ-1 & Web Server & 8905 & Manages the website and customer-facing interactions \\
+\hline
+Supervision / IT & RZ-2 & Monitoring Server & 1465 & Monitors server and network performance \\
+\hline
+Base de données / Gestion & RZ-3 & Database Server & 489 & Centralizes and secures client and internal data \\
+\hline
+Partage / Collaboration & RZ-4 & NFS Server & 165 & Enables internal file and document sharing \\
+\hline
+\end{tabularx}
+\end{center}
+
+\subsection{Subnetting (VLSM) Diagram}
+
+\begin{center}
+\includegraphics[width=\linewidth]{../../img/CORE/sarl-vlsm.png}
+\end{center}
+
+
+\newpage
+
+% -------------------------------------------------------------
+% 3. TECHNOLOGIES USED
+% -------------------------------------------------------------
+\section{Technologies Used}
+
+\begin{itemize}
+  \item \textbf{GNS3 3.0.5} — Network simulation environment.
+  \item \textbf{Cisco Routers (3725/3745)} — Core routing infrastructure.
+  \item \textbf{Ubuntu Server 20.04} — Server and network service hosting.
+  \item \textbf{OSPF} — Dynamic routing protocol.
+  \item \textbf{VLANs} — Logical segmentation and broadcast containment.
+  \item \textbf{Nmap \& Wireshark} — Analysis and testing tools.
+  \item \textbf{ZeroTier} — Potential remote access overlay network.
+  \item \textbf{SSH / Telnet} — Device management protocols.
+\end{itemize}
+
+\newpage
+
+% -------------------------------------------------------------
+% 4. ARCHITECTURE DESIGN
+% -------------------------------------------------------------
+\section{Architecture Design}
+
+\begin{center}
+\includegraphics[width=\linewidth]{../../img/CORE/tech-solutions-sarl-network-infrastructure.png}
+\end{center}
+
+\subsection{Core Layer}
+
+The backbone contains the primary routing equipment enabling communication between all segments.
+
+\subsection{Distribution Layer}
+
+VLAN segmentation and policy enforcement occur at this layer.
+
+\subsection{Access Layer}
+
+End-user devices and servers connect at this level.
+
+\newpage
+
+% -------------------------------------------------------------
+% 5. IMPLEMENTATION STEPS
+% -------------------------------------------------------------
+\section{Implementation Steps}
+
+\begin{enumerate}
+  \item Prepare GNS3 environment and import appliance templates.
+  \item Deploy routers, switches, and servers.
+  \item Configure VLANs and interfaces.
+  \item Configure OSPF across backbone routers.
+  \item Implement ACLs and security policies.
+  \item Verify connectivity and routing.
+  \item Test bandwidth, latency, and redundancy.
+\end{enumerate}
+
+\newpage
+
+% -------------------------------------------------------------
+% 6. SECURITY MODEL
+% -------------------------------------------------------------
+\section{Security Model}
+
+Security policies were applied on multiple layers:
+
+\begin{itemize}
+  \item ACLs restricting cross-department traffic.
+  \item VLAN isolation.
+  \item SSH-enabled secure device management.
+  \item Logging and monitoring using Linux servers.
+\end{itemize}
+
+\newpage
+
+% -------------------------------------------------------------
+% 7. CONCLUSION
+% -------------------------------------------------------------
+\section{Conclusion}
+
+This document summarizes the complete network architecture for Tech Solutions (SARL).  
+The simulated environment provides a realistic, scalable, and secure platform for training, experimentation, and enterprise design validation.
+
+\vfill
+
+\begin{center}
+\textbf{End of Report}
+\end{center}
+
+\end{document}

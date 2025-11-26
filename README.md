@@ -5,10 +5,10 @@
 [![Stargazers](https://img.shields.io/badge/STARS-01-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/stargazers)
 [![Issues](https://img.shields.io/badge/ISSUES-00-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/issues)
 [![GPL License](https://img.shields.io/badge/LICENSE-GPL-blue?style=plastic)](LICENSE)
-[![Linkedin](https://img.shields.io/badge/Linkedin-6.2k-blue?style=plastic)](https://www.linkedin.com/in/zouari-omar-143239283)
+[![Linkedin](https://img.shields.io/badge/Linkedin-6.3k-blue?style=plastic)](https://www.linkedin.com/in/zouari-omar-143239283)
 
 <h1 align="center">
-  <a href="http://www.amitmerchant.com/electron-markdownify"><img src="imgs/sarl.png" alt="SARL" width="600"></a>
+  <a href="http://www.amitmerchant.com/electron-markdownify"><img src="img/CORE/sarl.png" alt="SARL" width="600"></a>
   <br>
   Tech Solutions (SARL) Network Infrastructure
 </h1>
@@ -22,6 +22,10 @@
 ![Bash](https://img.shields.io/badge/Bash-Scripting-black?logo=gnu-bash)
 ![VLAN](https://img.shields.io/badge/VLAN-Networking-lightgrey)
 ![OSPF](https://img.shields.io/badge/OSPF-Routing-red)
+![Nmap](https://img.shields.io/badge/Nmap-Network%20Scanner-2e5c99?logo=gnu-bash)
+![ZeroTier](https://img.shields.io/badge/ZeroTier-Virtual%20Network-orange?logo=zerotier)
+![SSH](https://img.shields.io/badge/SSH-Secure%20Shell-6f42c1?logo=openssh)
+![Telnet](https://img.shields.io/badge/Telnet-Remote%20Access-9cf)
 
 <p align="center">
   <a href="#project-overview">Project Overview</a> •
@@ -33,7 +37,7 @@
   <a href="#contact">Contact</a>
 </p>
 
-<p align="center"> <img src="https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/blob/main/imgs/tech-solutions-sarl-network-infrastructure.png?raw=true"></img> </p>
+<p align="center"> <img src="img/CORE/tech-solutions-sarl-network-infrastructure.png"></img> </p>
 
 ## Project Overview
 
@@ -57,6 +61,7 @@ Before you begin, make sure you have the following software installed:
 
 - GNS3: Download and install GNS3(V3.0.5)
 - Cisco Router ([Cisco 3725](https://drive.google.com/file/d/1Q8i5ApabSRYu0QCmtyK2NzcmUWKuiWMD/view?usp=drive_link))
+- Cisco Router ([Cisco 3745](https://drive.google.com/file/d/1Aw1Kooz-INVcbFek9yOc4cGsgFE2oO6H/view?usp=drive_link))
 - Linux Server ([QEMU-linux-ubuntu-server-20.04](https://cloud-images.ubuntu.com/releases/focal/release))
 
 ### Setup the project
