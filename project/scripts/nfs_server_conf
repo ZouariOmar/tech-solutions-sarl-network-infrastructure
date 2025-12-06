@@ -8,7 +8,8 @@
 #
 # .DESCRIPTION
 #   I write this script for
-#   `Linux kvm 5.4.0-29-generic #33-Ubuntu SMP Wed Apr 29 14:32:27 UTC 2020 x86_64 x86_64 GNU/Linux`
+#   `Linux nfs-server 6.8.0-88-generic #89-Ubnutu SMP PREEMPT_DYNAMIC Sat Oct 11 01:02:46 UTC 2025 x86_64 x86_64 GNU/Linux`
+#   (ubuntu-24.04.3-live-server-amd64)
 #
 # .PARAMETER NONE
 #   NONE

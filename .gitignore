@@ -1,8 +1,7 @@
-# Auto-build files
-# bin/build/*
+.gitignore
 
-# Env file
-# project/.env
+### Todo file ###
+doc/TODO.md
 
-# Todo file
-# doc/TODO.md
+### Quemu images ###
+project/quemu/*

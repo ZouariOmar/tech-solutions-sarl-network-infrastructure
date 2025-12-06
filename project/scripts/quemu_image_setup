@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# =========================================
+# .FILE
+#   quemu_image_setup
+#
+# .SYNOPSIS
+#   Create/run quemu image from/without linux .iso file
+#
+# .DESCRIPTION
+#   `qemu-cli + linux.iso ==> linux_vm.qcow2`
+#   [TESTED] Linux nfs-server 6.8.0-88-generic #89-Ubnutu SMP PREEMPT_DYNAMIC Sat Oct 11 01:02:46 UTC 2025 x86_64 x86_64 GNU/Linux
+#   [QEMU-IMAGES] https://drive.google.com/drive/folders/1lB6PC9CFF4Hk3t_BUzBfBoOtKSKMJgSq?usp=drive_link
+#
+#
+# .PARAMETER NONE
+#   NONE
+#
+# .INPUTS
+#   NONE
+#
+# .OUTPUTS
+#   NONE
+#
+# .NOTES
+#   Version       : 1.0
+#   Author        : @ZouariOmar <zouariomar20@gmail.com>
+#   Created       : 12/07/2025
+#   Change Log    : c882d04
+#
+# .EXAMPLE
+#   ./quemu_image_setup
+# =========================================
+
+# CUSTOM CONFIGURATION PART
+ISO_IMAGE='path_to_iso_file'
+QCOW2_IMAGE='path_to_qcow2_file'
+
+# Create linux_vm with size 20G
+qemu-img create -f qcow2 ${QCOW2_IMAGE} 20G
+
+# Boot QEMU with ISO (only for installation)
+qemu-system-x86_64 -m 2G -boot d -cdrom ${ISO_IMAGE} -hda ${QCOW2_IMAGE} -net nic -net user
+
+# Boot QEMU without ISO
+# Use -enable-kvm if your CPU supports virtualization
+qemu-system-x86_64 -enable-kvm -m 2G -hda ${QCOW2_IMAGE} -net nic -net user
