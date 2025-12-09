@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # =========================================
 # .FILE
-#   nfs-server-conf
+#   nfs-client-conf
 #
 # .SYNOPSIS
-#   Bash script to configure NFS-Linux server
+#   Bash script to configure NFS-Linux client
 #
 # .DESCRIPTION
 #   I write this script for
@@ -27,27 +27,22 @@
 #   Change Log    : 9780b36
 #
 # .EXAMPLE
-#   > ./nfs-server-conf
+#   > ./nfs-client-conf
 #   --
-#   > NET_INTERFACE="enp2s0"       \
-#     NET_ADDRESS="172.24.74.2/24" \
-#     NET_GW="172.24.74.1"         \
-#     NET_DNS_SERVERS="[8.8.8.8]"  \
-#     SHARED_DIR='/srv/nfs/share' \
-#     NFS_GROUP='zouari_omar'
-#     ./nfs_server_conf
+#   > NET_INTERFACE=enp2s0         \
+#     SERVER_ADDRESS='172.24.74.2' \
+#     SHARED_DIR='/srv/nfs/share'  \
+#     MOUNT_POINT='/mnt/nfs'
+#     ./nfs_client_conf
 # =========================================
 
 #################################
 ### CUSTOM CONFIGURATION PART ###
 #################################
 NET_INTERFACE="enp2s0"
-NET_SUBNET='X.X.X.X/XX'
-NET_ADDRESS="X.X.X.X/XX"
-NET_GW="X.X.X.X"
-NET_DNS_SERVERS="[X.X.X.X]"
+SERVER_ADDRESS="X.X.X.X"
 SHARED_DIR='path_to_shared_directory'
-NFS_GROUP='group_to_chown_shared_dir'
+MOUNT_POINT='path_to_mount_directory'
 
 ##################################
 ### GENERAL CONFIGURATION PART ###
@@ -60,57 +55,45 @@ sudo sed -i 's/XKBLAYOUT=".*"/XKBLAYOUT="fr"/' /etc/default/keyboard
 sudo apt update && sudo apt upgrade
 
 # Change the current hostname
-hostnamectl set-hostname nfs-server
+hostnamectl set-hostname nfs-client
 
 ##################################
 ### NETWORK CONFIGURATION PART ###
 ##################################
 
 # Set the private static ip address
-sudo bash -c "cat << 'EOF' > /etc/netplan/01-static.yaml
+sudo bash -c "cat << 'EOF' > /etc/netplan/01-enp2s0.yaml
 network:
   version: 2
-  renderer: networkd
   ethernets:
     ${NET_INTERFACE}:
-      dhcp4: no
-      addresses:
-        - ${NET_ADDRESS}
-      nameservers:
-        addresses: ${NET_DNS_SERVERS}
-      routes:
-        - to: default
-          via: ${NET_GW}
+      dhcp4: true
 EOF"
 
 # Change 01-static.yaml accessibility
-sudo chmod 600 /etc/netplan/01-static.yaml
+sudo chmod 600 /etc/netplan/01-enp2s0.yaml
 
 # Applay changes
 sudo netplan apply
 
 #####################################
-### NFS-SERVER CONFIGURATION PART ###
+### NFS-CLIENT CONFIGURATION PART ###
 #####################################
 
-# Install Server NFS-SERVER package
-sudo apt install -y nfs-kernel-server nfs-common
+# Install NFS-CLIENT package
+sudo apt install nfs-common
 
-# Enable NFS service
-sudo systemctl enable --now nfs-server
+# Create mount point
+sudo mkdir -p ${MOUNT_POINT}
 
-# Create and Export a Shared Directory
-sudo mkdir -p ${SHARED_DIR}
+# Mount the share
+sudo mount ${SERVER_ADDRESS}:${SHARED_DIR} ${MOUNT_POINT}
 
-# Add local subnet to the ACL (Access Control List)
-echo "${SHARED_DIR} ${NET_SUBNET}(rw,sync,no_subtree_check)" | sudo tee -a /etc/exports
+# Verify mount
+df -h | grep nfs
 
-# Apply exports
-sudo exportfs -ra
+# Umount the share
+# sudo umount ${MOUNT_POINT}
 
-# Give grp permission
-sudo chown -R :${NFS_GROUP} ${SHARED_DIR}
-sudo chmod -R 775 ${SHARED_DIR}
-
-# Configure Firewall
-sudo ufw allow from ${NET_SUBNET} to any port nfs
+# Auto-Mount at Boot
+# echo "${SERVER_ADDRESS}:${SHARED_DIR}  ${MOUNT_POINT}  nfs  defaults  0  0" | sudo tee -a /etc/fstab
