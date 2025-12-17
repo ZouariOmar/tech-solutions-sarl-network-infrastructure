@@ -8,7 +8,7 @@
 #
 # .DESCRIPTION
 #   I write this script for
-#   `Linux nfs-server 6.8.0-88-generic #89-Ubnutu SMP PREEMPT_DYNAMIC Sat Oct 11 01:02:46 UTC 2025 x86_64 x86_64 GNU/Linux`
+#   `Linux nfs-server 6.8.0-88-generic #89-Ubuntu SMP PREEMPT_DYNAMIC Sat Oct 11 01:02:46 UTC 2025 x86_64 x86_64 GNU/Linux`
 #   (ubuntu-24.04.3-live-server-amd64)
 #
 # .PARAMETER NONE
@@ -86,7 +86,7 @@ EOF"
 # Change 01-static.yaml accessibility
 sudo chmod 600 /etc/netplan/01-static.yaml
 
-# Applay changes
+# Apply changes
 sudo netplan apply
 
 #####################################

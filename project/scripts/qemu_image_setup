@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 # =========================================
 # .FILE
-#   quemu_image_setup
+#   qemu_image_setup
 #
 # .SYNOPSIS
-#   [Create|Run|Convert] quemu image
+#   [Create|Run|Convert] qemu image
 #
 # .DESCRIPTION
 #   `qemu-cli + linux.iso ==> linux_vm.qcow2`
-#   [TESTED] Linux nfs-server 6.8.0-88-generic #89-Ubnutu SMP PREEMPT_DYNAMIC Sat Oct 11 01:02:46 UTC 2025 x86_64 x86_64 GNU/Linux
+#   [TESTED] Linux nfs-server 6.8.0-88-generic #89-Ubuntu SMP PREEMPT_DYNAMIC Sat Oct 11 01:02:46 UTC 2025 x86_64 x86_64 GNU/Linux
 #   [QEMU-IMAGES] https://drive.google.com/drive/folders/1lB6PC9CFF4Hk3t_BUzBfBoOtKSKMJgSq?usp=drive_link
 #
 # .PARAMETER NONE
@@ -27,12 +27,12 @@
 #   Change Log    : c882d04
 #
 # .EXAMPLE
-#   > ./quemu_image_setup
+#   > ./qemu_image_setup
 #   --
 #   > ISO_IMAGE='ubuntu-24.04.3-live-server-amd64.iso' \
 #     QCOW2_IMAGE='linux_server_vm.qcow2'              \
 #     VMDK_IMAGE='linux_server_vm.vmdk'
-#     ./quemu_image_setup
+#     ./qemu_image_setup
 # =========================================
 
 #################################
