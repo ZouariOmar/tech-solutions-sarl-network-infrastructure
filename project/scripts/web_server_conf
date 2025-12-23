@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+# =========================================
+# .FILE
+#   web_server_conf
+#
+# .SYNOPSIS
+#   Bash script to configure WEB-Linux server
+#
+# .DESCRIPTION
+#   I write this script for
+#   `Linux nfs-server 6.8.0-88-generic #89-Ubuntu SMP PREEMPT_DYNAMIC Sat Oct 11 01:02:46 UTC 2025 x86_64 x86_64 GNU/Linux`
+#   (ubuntu-24.04.3-live-server-amd64)
+#
+# .PARAMETER NONE
+#   NONE
+#
+# .INPUTS
+#   NONE
+#
+# .OUTPUTS
+#   NONE
+#
+# .NOTES
+#   Version       : 1.0
+#   Author        : @ZouariOmar <zouariomar20@gmail.com>
+#   Created       : 11/22/2025
+#   Change Log    : 9780b36
+#
+# .EXAMPLE
+#   > ./web_server_conf
+#   --
+#   > NET_INTERFACE="enp2s0"          \
+#     NET_ADDRESS="172.24.74.2/24"    \
+#     NET_GW="172.24.74.1"            \
+#     NET_DNS_SERVERS="[8.8.8.8]"     \
+#     WEB_SERVER_ADDRESS='172.24.74.2'
+#     ./web_server_conf
+# =========================================
+
+#################################
+### CUSTOM CONFIGURATION PART ###
+#################################
+NET_INTERFACE="enp2s0"
+NET_ADDRESS="X.X.X.X/XX"
+NET_GW="X.X.X.X"
+NET_DNS_SERVERS="[X.X.X.X]"
+
+##################################
+### GENERAL CONFIGURATION PART ###
+##################################
+
+# Set keymap into fr
+sudo sed -i 's/XKBLAYOUT=".*"/XKBLAYOUT="fr"/' /etc/default/keyboard
+
+# Update the system
+sudo apt update && sudo apt upgrade
+
+# Change the current hostname
+hostnamectl set-hostname web-server
+
+##################################
+### NETWORK CONFIGURATION PART ###
+##################################
+
+# Set the private static ip address
+sudo bash -c "cat << 'EOF' > /etc/netplan/01-static.yaml
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ${NET_INTERFACE}:
+      dhcp4: no
+      addresses:
+        - ${NET_ADDRESS}
+      nameservers:
+        addresses: ${NET_DNS_SERVERS}
+      routes:
+        - to: default
+          via: ${NET_GW}
+EOF"
+
+# Change 01-static.yaml accessibility
+sudo chmod 600 /etc/netplan/01-static.yaml
+
+# Apply changes
+sudo netplan apply
+
+#####################################
+### WEB-SERVER CONFIGURATION PART ###
+#####################################
+
+# Install apache2 package
+sudo apt install apache2
+
+# Enable apache2 service
+sudo systemctl enable --now apache
