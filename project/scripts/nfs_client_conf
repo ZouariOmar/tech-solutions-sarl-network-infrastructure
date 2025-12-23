@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # =========================================
 # .FILE
-#   nfs-client-conf
+#   nfs_client_conf
 #
 # .SYNOPSIS
 #   Bash script to configure NFS-Linux client
@@ -61,7 +61,7 @@ hostnamectl set-hostname nfs-client
 ### NETWORK CONFIGURATION PART ###
 ##################################
 
-# Set the private static ip address
+# Set dhcp ip address
 sudo bash -c "cat << 'EOF' > /etc/netplan/01-enp2s0.yaml
 network:
   version: 2
@@ -95,5 +95,5 @@ df -h | grep nfs
 # Umount the share
 # sudo umount ${MOUNT_POINT}
 
-# Auto-Mount at Boot
-# echo "${SERVER_ADDRESS}:${SHARED_DIR}  ${MOUNT_POINT}  nfs  defaults  0  0" | sudo tee -a /etc/fstab
+# Mount NFS share safely using systemd automount; system boots normally even if the NFS server is down.
+echo "${SERVER_ADDRESS}:${SHARED_DIR}  ${MOUNT_POINT}  nfs  defaults,_netdev,x-systemd.automount,nofail  0  0" | sudo tee -a /etc/fstab >/dev/null
