@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+# =========================================
+# .FILE
+#   nfs_client_conf
+#
+# .SYNOPSIS
+#   Bash script to configure NFS-Linux client
+#
+# .DESCRIPTION
+#   I write this script for
+#   `Linux nfs-server 6.8.0-88-generic #89-Ubuntu SMP PREEMPT_DYNAMIC Sat Oct 11 01:02:46 UTC 2025 x86_64 x86_64 GNU/Linux`
+#   (ubuntu-24.04.3-live-server-amd64)
+#
+# .PARAMETER NONE
+#   NONE
+#
+# .INPUTS
+#   NONE
+#
+# .OUTPUTS
+#   NONE
+#
+# .NOTES
+#   Version       : 1.0
+#   Author        : @ZouariOmar <zouariomar20@gmail.com>
+#   Created       : 11/22/2025
+#   Change Log    : 9780b36
+#
+# .EXAMPLE
+#   > ./nfs-client-conf
+#   --
+#   > NET_INTERFACE=enp2s0         \
+#     SERVER_ADDRESS='172.24.74.2' \
+#     SHARED_DIR='/srv/nfs/share'  \
+#     MOUNT_POINT='/mnt/nfs'
+#     ./nfs_client_conf
+# =========================================
+
+#################################
+### CUSTOM CONFIGURATION PART ###
+#################################
+NET_INTERFACE="enp2s0"
+SERVER_ADDRESS="X.X.X.X"
+SHARED_DIR='path_to_shared_directory'
+MOUNT_POINT='path_to_mount_directory'
+
+##################################
+### GENERAL CONFIGURATION PART ###
+##################################
+
+# Set keymap into fr
+sudo sed -i 's/XKBLAYOUT=".*"/XKBLAYOUT="fr"/' /etc/default/keyboard
+
+# Update the system
+sudo apt update && sudo apt upgrade
+
+# Change the current hostname
+hostnamectl set-hostname nfs-client
+
+##################################
+### NETWORK CONFIGURATION PART ###
+##################################
+
+# Set dhcp ip address
+sudo bash -c "cat << 'EOF' > /etc/netplan/01-enp2s0.yaml
+network:
+  version: 2
+  ethernets:
+    ${NET_INTERFACE}:
+      dhcp4: true
+EOF"
+
+# Change 01-enp2s0.yaml accessibility
+sudo chmod 600 /etc/netplan/01-enp2s0.yaml
+
+# Apply changes
+sudo netplan apply
+
+#####################################
+### NFS-CLIENT CONFIGURATION PART ###
+#####################################
+
+# Install NFS-CLIENT package
+sudo apt install nfs-common
+
+# Create mount point
+sudo mkdir -p ${MOUNT_POINT}
+
+# Mount the share
+sudo mount ${SERVER_ADDRESS}:${SHARED_DIR} ${MOUNT_POINT}
+
+# Verify mount
+df -h | grep nfs
+
+# Umount the share
+# sudo umount ${MOUNT_POINT}
+
+# Mount NFS share safely using systemd automount; system boots normally even if the NFS server is down.
+echo "${SERVER_ADDRESS}:${SHARED_DIR}  ${MOUNT_POINT}  nfs  defaults,_netdev,x-systemd.automount,nofail  0  0" | sudo tee -a /etc/fstab >/dev/null
