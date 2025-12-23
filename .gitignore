@@ -1,7 +1,0 @@
-.gitignore
-
-### Todo file ###
-doc/TODO.md
-
-### Quemu images ###
-project/qemu/*
