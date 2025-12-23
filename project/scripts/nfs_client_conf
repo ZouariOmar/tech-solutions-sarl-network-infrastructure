@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 # =========================================
 # .FILE
-#   nfs-client-conf
+#   nfs_client_conf
 #
 # .SYNOPSIS
 #   Bash script to configure NFS-Linux client
 #
 # .DESCRIPTION
 #   I write this script for
-#   `Linux nfs-server 6.8.0-88-generic #89-Ubnutu SMP PREEMPT_DYNAMIC Sat Oct 11 01:02:46 UTC 2025 x86_64 x86_64 GNU/Linux`
+#   `Linux nfs-server 6.8.0-88-generic #89-Ubuntu SMP PREEMPT_DYNAMIC Sat Oct 11 01:02:46 UTC 2025 x86_64 x86_64 GNU/Linux`
 #   (ubuntu-24.04.3-live-server-amd64)
 #
 # .PARAMETER NONE
@@ -61,7 +61,7 @@ hostnamectl set-hostname nfs-client
 ### NETWORK CONFIGURATION PART ###
 ##################################
 
-# Set the private static ip address
+# Set dhcp ip address
 sudo bash -c "cat << 'EOF' > /etc/netplan/01-enp2s0.yaml
 network:
   version: 2
@@ -70,10 +70,10 @@ network:
       dhcp4: true
 EOF"
 
-# Change 01-static.yaml accessibility
+# Change 01-enp2s0.yaml accessibility
 sudo chmod 600 /etc/netplan/01-enp2s0.yaml
 
-# Applay changes
+# Apply changes
 sudo netplan apply
 
 #####################################
@@ -95,5 +95,5 @@ df -h | grep nfs
 # Umount the share
 # sudo umount ${MOUNT_POINT}
 
-# Auto-Mount at Boot
-# echo "${SERVER_ADDRESS}:${SHARED_DIR}  ${MOUNT_POINT}  nfs  defaults  0  0" | sudo tee -a /etc/fstab
+# Mount NFS share safely using systemd automount; system boots normally even if the NFS server is down.
+echo "${SERVER_ADDRESS}:${SHARED_DIR}  ${MOUNT_POINT}  nfs  defaults,_netdev,x-systemd.automount,nofail  0  0" | sudo tee -a /etc/fstab >/dev/null

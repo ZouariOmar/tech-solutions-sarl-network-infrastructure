@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+# =========================================
+# .FILE
+#   db_server_conf
+#
+# .SYNOPSIS
+#   Bash script to configure DB-Linux server
+#
+# .DESCRIPTION
+#   I write this script for
+#   `Linux nfs-server 6.8.0-88-generic #89-Ubuntu SMP PREEMPT_DYNAMIC Sat Oct 11 01:02:46 UTC 2025 x86_64 x86_64 GNU/Linux`
+#   (ubuntu-24.04.3-live-server-amd64)
+#
+# .PARAMETER NONE
+#   NONE
+#
+# .INPUTS
+#   NONE
+#
+# .OUTPUTS
+#   NONE
+#
+# .NOTES
+#   Version       : 1.0
+#   Author        : @ZouariOmar <zouariomar20@gmail.com>
+#   Created       : 11/22/2025
+#   Change Log    : 9780b36
+#
+# .EXAMPLE
+#   > ./db_server_conf
+#   --
+#   > NET_INTERFACE="enp2s0"                     \
+#     NET_ADDRESS="172.24.74.2/24"               \
+#     NET_GW="172.24.74.1"                       \
+#     NET_DNS_SERVERS="[8.8.8.8]"                \
+#     DB_ACCESS_CLIENT="clientdb'@'192.168.2.%'"
+#     ./db_server_conf
+# =========================================
+
+#################################
+### CUSTOM CONFIGURATION PART ###
+#################################
+NET_INTERFACE="enp2s0"
+NET_ADDRESS="X.X.X.X/XX"
+NET_GW="X.X.X.X"
+NET_DNS_SERVERS="[X.X.X.X]"
+DB_ACCESS_CLIENT="'db_client'@'X.X.X.X'"
+
+##################################
+### GENERAL CONFIGURATION PART ###
+##################################
+
+# Set keymap into fr
+sudo sed -i 's/XKBLAYOUT=".*"/XKBLAYOUT="fr"/' /etc/default/keyboard
+
+# Update the system
+sudo apt update && sudo apt upgrade
+
+# Change the current hostname
+hostnamectl set-hostname nfs-server
+
+##################################
+### NETWORK CONFIGURATION PART ###
+##################################
+
+# Set the private static ip address
+sudo bash -c "cat << 'EOF' > /etc/netplan/01-static.yaml
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ${NET_INTERFACE}:
+      dhcp4: no
+      addresses:
+        - ${NET_ADDRESS}
+      nameservers:
+        addresses: ${NET_DNS_SERVERS}
+      routes:
+        - to: default
+          via: ${NET_GW}
+EOF"
+
+# Change 01-static.yaml accessibility
+sudo chmod 600 /etc/netplan/01-static.yaml
+
+# Apply changes
+sudo netplan apply
+
+#####################################
+### DB-SERVER CONFIGURATION PART ###
+#####################################
+
+# Install MySQL Server
+sudo apt install mysql-server -y
+
+# Enable mysql service
+sudo systemctl enable --now mysql
+
+# Allow Remote Connections
+sudo sed -i 's/^bind-address\s*=.*/bind-address = 0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
+sudo systemctl restart mysql
+
+# Firewall and Port Check
+sudo ufw allow 3306/tcp
+sudo ufw reload
+
+# Database and User Creation
+sudo mysql -e "CREATE DATABASE IF NOT EXISTS labdb; CREATE USER IF NOT EXISTS ${DB_ACCESS_CLIENT} IDENTIFIED BY 'StrongPass123!'; GRANT ALL PRIVILEGES ON labdb.* TO ${DB_ACCESS_CLIENT}; FLUSH PRIVILEGES;"
+
+# Create Table and Insert Data
+sudo mysql -e "USE labdb; CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(50), email VARCHAR(100)); INSERT INTO users (username, email) VALUES ('server_user1','srv1@mail.com'),('server_user2','srv2@mail.com'); SELECT * FROM users;"

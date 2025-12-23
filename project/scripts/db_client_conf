@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+# =========================================
+# .FILE
+#   db_client_conf
+#
+# .SYNOPSIS
+#   Bash script to configure DB-Linux client
+#
+# .DESCRIPTION
+#   I write this script for
+#   `Linux nfs-server 6.8.0-88-generic #89-Ubuntu SMP PREEMPT_DYNAMIC Sat Oct 11 01:02:46 UTC 2025 x86_64 x86_64 GNU/Linux`
+#   (ubuntu-24.04.3-live-server-amd64)
+#
+# .PARAMETER NONE
+#   NONE
+#
+# .INPUTS
+#   NONE
+#
+# .OUTPUTS
+#   NONE
+#
+# .NOTES
+#   Version       : 1.0
+#   Author        : @ZouariOmar <zouariomar20@gmail.com>
+#   Created       : 11/22/2025
+#   Change Log    : 9780b36
+#
+# .EXAMPLE
+#   > ./nfs_client_conf
+#   --
+#   > NET_INTERFACE=enp2s0 ./db_client_conf
+# =========================================
+
+#################################
+### CUSTOM CONFIGURATION PART ###
+#################################
+NET_INTERFACE="enp2s0"
+HOSTNAME="db-client"
+
+##################################
+### GENERAL CONFIGURATION PART ###
+##################################
+
+# Set keymap into fr
+sudo sed -i 's/XKBLAYOUT=".*"/XKBLAYOUT="fr"/' /etc/default/keyboard
+
+# Update the system
+sudo apt update && sudo apt upgrade
+
+# Change the current hostname
+hostnamectl set-hostname ${HOSTNAME}
+
+##################################
+### NETWORK CONFIGURATION PART ###
+##################################
+
+# Set dhcp ip address
+sudo bash -c "cat << 'EOF' > /etc/netplan/01-enp2s0.yaml
+network:
+  version: 2
+  ethernets:
+    ${NET_INTERFACE}:
+      dhcp4: true
+EOF"
+
+# Change 01-enp2s0.yaml accessibility
+sudo chmod 600 /etc/netplan/01-enp2s0.yaml
+
+# Apply changes
+sudo netplan apply
+
+####################################
+### DB-CLIENT CONFIGURATION PART ###
+####################################
+
+# Install MySQL Client
+sudo apt install mysql-client -y
+
+# Remote Connection && Retrieve Server Data
+mysql -h 192.168.2.136 -u clientdb -p -e "SHOW DATABASES; USE labdb; SHOW TABLES; SELECT * FROM users;"
