@@ -46,7 +46,7 @@ HOSTNAME="db-client"
 sudo sed -i 's/XKBLAYOUT=".*"/XKBLAYOUT="fr"/' /etc/default/keyboard
 
 # Update the system
-sudo apt update && sudo apt upgrade
+sudo apt update -y && sudo apt upgrade -y
 
 # Change the current hostname
 hostnamectl set-hostname ${HOSTNAME}

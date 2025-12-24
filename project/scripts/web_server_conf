@@ -53,7 +53,7 @@ NET_DNS_SERVERS="[X.X.X.X]"
 sudo sed -i 's/XKBLAYOUT=".*"/XKBLAYOUT="fr"/' /etc/default/keyboard
 
 # Update the system
-sudo apt update && sudo apt upgrade
+sudo apt update -y && sudo apt upgrade -y
 
 # Change the current hostname
 hostnamectl set-hostname web-server
@@ -90,7 +90,7 @@ sudo netplan apply
 #####################################
 
 # Install apache2 package
-sudo apt install apache2
+sudo apt install apache2 -y
 
 # Enable apache2 service
-sudo systemctl enable --now apache
+sudo systemctl enable --now apache2
