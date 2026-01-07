@@ -1,0 +1,199 @@
+#!/usr/bin/env bash
+# =========================================
+# .FILE
+#   monitoring_server_conf
+#
+# .SYNOPSIS
+#   Bash script to configure Prometheus,
+#   Node Exporter, and Grafana monitoring stack
+#
+# .DESCRIPTION
+#   This script installs and configures:
+#     - Prometheus (systemd service)
+#     - Node Exporter
+#     - Grafana
+#
+#   Tested on:
+#   Linux 6.8.0-88-generic #89-Ubuntu SMP PREEMPT_DYNAMIC
+#   (ubuntu-24.04.3-live-server-amd64)
+#
+# .PARAMETER NONE
+#   NONE
+#
+# .INPUTS
+#   NONE
+#
+# .OUTPUTS
+#   NONE
+#
+# .NOTES
+#   Version       : 1.0
+#   Author        : @ZouariOmar <zouariomar20@gmail.com>
+#   Created       : 01/07/2026
+#   Change Log    : initial-release
+#
+# .EXAMPLE
+#   > ./monitoring_server_conf
+#
+# =========================================
+
+#################################
+### CUSTOM CONFIGURATION PART ###
+#################################
+
+PROM_VERSION="1.8.1"
+PROM_USER="prometheus"
+NODE_USER="node_exporter"
+
+PROM_DIR="/etc/prometheus"
+PROM_DATA_DIR="/var/lib/prometheus"
+PROM_BIN="/usr/local/bin/prometheus"
+
+##################################
+### GENERAL CONFIGURATION PART ###
+##################################
+
+# Update system
+sudo apt update -y && sudo apt upgrade -y
+
+# Install required packages
+sudo apt install -y wget curl tar apt-transport-https software-properties-common
+
+################################
+### PROMETHEUS CONFIGURATION ###
+################################
+
+# Create Prometheus user
+sudo useradd --no-create-home --shell /bin/false ${PROM_USER}
+
+# Create directories
+sudo mkdir -p ${PROM_DIR}
+sudo mkdir -p ${PROM_DATA_DIR}
+
+sudo chown ${PROM_USER}:${PROM_USER} ${PROM_DIR}
+sudo chown ${PROM_USER}:${PROM_USER} ${PROM_DATA_DIR}
+
+# Download Prometheus
+cd /tmp || exit
+wget https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz
+
+# Extract
+tar xvf prometheus-${PROM_VERSION}.linux-amd64.tar.gz
+
+# Install binaries
+sudo cp prometheus-${PROM_VERSION}.linux-amd64/prometheus /usr/local/bin/
+sudo cp prometheus-${PROM_VERSION}.linux-amd64/promtool /usr/local/bin/
+
+sudo chown ${PROM_USER}:${PROM_USER} /usr/local/bin/prometheus
+sudo chown ${PROM_USER}:${PROM_USER} /usr/local/bin/promtool
+
+##################################
+### PROMETHEUS CONFIG FILE ###
+##################################
+
+sudo bash -c "cat << 'EOF' > ${PROM_DIR}/prometheus.yml
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'node_exporter'
+    static_configs:
+      - targets: ['localhost:9100']
+EOF"
+
+sudo chown ${PROM_USER}:${PROM_USER} ${PROM_DIR}/prometheus.yml
+
+##################################
+### PROMETHEUS SYSTEMD SERVICE ###
+##################################
+
+sudo bash -c "cat << 'EOF' > /etc/systemd/system/prometheus.service
+[Unit]
+Description=Prometheus
+After=network-online.target
+
+[Service]
+User=${PROM_USER}
+ExecStart=${PROM_BIN} \
+  --config.file=${PROM_DIR}/prometheus.yml \
+  --storage.tsdb.path=${PROM_DATA_DIR}
+
+[Install]
+WantedBy=multi-user.target
+EOF"
+
+# Enable and start Prometheus
+sudo systemctl daemon-reload
+sudo systemctl enable --now prometheus
+
+##################################
+### NODE EXPORTER CONFIGURATION ###
+##################################
+
+# Create Node Exporter user
+sudo useradd --no-create-home --shell /bin/false ${NODE_USER}
+
+# Download Node Exporter
+cd /tmp || exit
+wget https://github.com/prometheus/node_exporter/releases/download/v${PROM_VERSION}/node_exporter-${PROM_VERSION}.linux-amd64.tar.gz
+
+# Extract
+tar xvf node_exporter-${PROM_VERSION}.linux-amd64.tar.gz
+
+# Install binary
+sudo cp node_exporter-${PROM_VERSION}.linux-amd64/node_exporter /usr/local/bin/
+sudo chown ${NODE_USER}:${NODE_USER} /usr/local/bin/node_exporter
+
+##################################
+### NODE EXPORTER SYSTEMD ###
+##################################
+
+sudo bash -c "cat << 'EOF' > /etc/systemd/system/node_exporter.service
+[Unit]
+Description=Node Exporter
+After=network-online.target
+
+[Service]
+User=${NODE_USER}
+ExecStart=/usr/local/bin/node_exporter
+
+[Install]
+WantedBy=multi-user.target
+EOF"
+
+# Enable and start Node Exporter
+sudo systemctl daemon-reload
+sudo systemctl enable --now node_exporter
+
+##################################
+### GRAFANA INSTALLATION ###
+##################################
+
+# Add Grafana repository
+wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"
+
+# Install Grafana
+sudo apt update
+sudo apt install -y grafana
+
+# Enable and start Grafana
+sudo systemctl enable --now grafana-server
+
+##################################
+### VERIFICATION PART ###
+##################################
+
+echo "========================================="
+echo " Monitoring stack installation completed "
+echo "========================================="
+echo " Prometheus : http://localhost:9090"
+echo " Grafana    : http://localhost:3000"
+echo " Default Grafana credentials:"
+echo "   user: admin"
+echo "   pass: admin"
+echo "========================================="

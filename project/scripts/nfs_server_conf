@@ -109,6 +109,8 @@ echo "${SHARED_DIR} ${NET_SUBNET}(rw,sync,no_subtree_check)" | sudo tee -a /etc/
 sudo exportfs -ra
 
 # Give grp permission
+# NOTE: To add new group `sudo groupadd NFS_GROUP`
+# NOTE: To delete group `sudo groupdel NFS_GROUP`
 sudo chown -R :${NFS_GROUP} ${SHARED_DIR}
 sudo chmod -R 775 ${SHARED_DIR}
 

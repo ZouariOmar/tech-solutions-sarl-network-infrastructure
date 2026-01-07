@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # =========================================
 # .FILE
-#   db_client_conf
+#   monitoring_client_conf
 #
 # .SYNOPSIS
-#   Bash script to configure DB-Linux client
+#   Bash script to configure MONITORING-Linux client
 #
 # .DESCRIPTION
 #   I write this script for
@@ -23,27 +23,20 @@
 # .NOTES
 #   Version       : 1.0
 #   Author        : @ZouariOmar <zouariomar20@gmail.com>
-#   Created       : 11/22/2025
+#   Created       : 01/07/2026
 #   Change Log    : 9780b36
 #
 # .EXAMPLE
 #   > ./nfs_client_conf
 #   --
-#   > NET_INTERFACE=enp2s0 \
-#     DB_SERVER_IP_ADDRESS="172.24.72.2" \
-#     DB_CLIENT_NAME="client" \
-#     DB_CLIENT_PASSWORD="client123"
-#     ./db_client_conf
+#   > NET_INTERFACE=enp2s0 ./monitoring_client_conf
 # =========================================
 
 #################################
 ### CUSTOM CONFIGURATION PART ###
 #################################
 NET_INTERFACE="enp2s0"
-DB_SERVER_IP_ADDRESS="X.X.X.X"
-DB_CLIENT_NAME="client_name"
-DB_CLIENT_PASSWORD="client_password"
-HOSTNAME="db-client"
+HOSTNAME="monitoring-client"
 
 ##################################
 ### GENERAL CONFIGURATION PART ###
@@ -77,12 +70,42 @@ sudo chmod 600 /etc/netplan/01-enp2s0.yaml
 # Apply changes
 sudo netplan apply
 
-####################################
-### DB-CLIENT CONFIGURATION PART ###
-####################################
+############################################
+### MONITORING-CLIENT CONFIGURATION PART ###
+############################################
 
-# Install MySQL Client
-sudo apt install mysql-client -y
+# Download node_exporter archive to /tmp
+cd /tmp && wget https://github.com/prometheus/node_exporter/releases/download/v1.6.1/node_exporter-1.6.1.linux-amd64.tar.gz
 
-# Remote Connection && Retrieve Server Data
-mysql -h ${DB_SERVER_IP_ADDRESS} -u ${DB_CLIENT_NAME} -p -e "SHOW DATABASES; USE labdb; SHOW TABLES; SELECT * FROM users;"
+# Extract the archive
+tar xvf node_exporter-1.6.1.linux-amd64.tar.gz
+
+# Move the node_exporter binary to a system-wide location
+sudo mv node_exporter-1.6.1.linux-amd64/node_exporter /usr/local/bin/
+
+# Create a dedicated non-login system user for security
+sudo useradd -rs /bin/false node_exporter
+
+# Create systemd service file (no nano, written inline)
+sudo tee /etc/systemd/system/node_exporter.service >/dev/null <<'EOF'
+[Unit]
+Description=Node Exporter
+After=network.target
+
+[Service]
+User=node_exporter
+ExecStart=/usr/local/bin/node_exporter
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Reload systemd to pick up the new service
+sudo systemctl daemon-reload
+
+# Enable node_exporter at boot and start it immediately
+sudo systemctl enable --now node_exporter
+
+# Verify node_exporter is exposing metrics locally
+# You should see Prometheus-style metrics output
+curl http://localhost:9100/metrics
