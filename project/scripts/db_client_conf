@@ -29,13 +29,20 @@
 # .EXAMPLE
 #   > ./nfs_client_conf
 #   --
-#   > NET_INTERFACE=enp2s0 ./db_client_conf
+#   > NET_INTERFACE=enp2s0 \
+#     DB_SERVER_IP_ADDRESS="172.24.72.2" \
+#     DB_CLIENT_NAME="client" \
+#     DB_CLIENT_PASSWORD="client123"
+#     ./db_client_conf
 # =========================================
 
 #################################
 ### CUSTOM CONFIGURATION PART ###
 #################################
 NET_INTERFACE="enp2s0"
+DB_SERVER_IP_ADDRESS="X.X.X.X"
+DB_CLIENT_NAME="client_name"
+DB_CLIENT_PASSWORD="client_password"
 HOSTNAME="db-client"
 
 ##################################
@@ -78,4 +85,4 @@ sudo netplan apply
 sudo apt install mysql-client -y
 
 # Remote Connection && Retrieve Server Data
-mysql -h 192.168.2.136 -u clientdb -p -e "SHOW DATABASES; USE labdb; SHOW TABLES; SELECT * FROM users;"
+mysql -h ${DB_SERVER_IP_ADDRESS} -u ${DB_CLIENT_NAME} -p -e "SHOW DATABASES; USE labdb; SHOW TABLES; SELECT * FROM users;"
