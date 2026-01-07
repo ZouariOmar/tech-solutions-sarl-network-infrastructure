@@ -80,6 +80,7 @@ sudo netplan apply
 ### NFS-CLIENT CONFIGURATION PART ###
 #####################################
 
+# INFO: To change group name: `sudo groupmod -n new-name current-name`
 # Install NFS-CLIENT package
 sudo apt install nfs-common
 

@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+# =========================================
+# .FILE
+#   monitoring_client_conf
+#
+# .SYNOPSIS
+#   Bash script to configure MONITORING-Linux client
+#
+# .DESCRIPTION
+#   I write this script for
+#   `Linux nfs-server 6.8.0-88-generic #89-Ubuntu SMP PREEMPT_DYNAMIC Sat Oct 11 01:02:46 UTC 2025 x86_64 x86_64 GNU/Linux`
+#   (ubuntu-24.04.3-live-server-amd64)
+#
+# .PARAMETER NONE
+#   NONE
+#
+# .INPUTS
+#   NONE
+#
+# .OUTPUTS
+#   NONE
+#
+# .NOTES
+#   Version       : 1.0
+#   Author        : @ZouariOmar <zouariomar20@gmail.com>
+#   Created       : 01/07/2026
+#   Change Log    : 9780b36
+#
+# .EXAMPLE
+#   > ./nfs_client_conf
+#   --
+#   > NET_INTERFACE=enp2s0 ./monitoring_client_conf
+# =========================================
+
+#################################
+### CUSTOM CONFIGURATION PART ###
+#################################
+NET_INTERFACE="enp2s0"
+HOSTNAME="monitoring-client"
+
+##################################
+### GENERAL CONFIGURATION PART ###
+##################################
+
+# Set keymap into fr
+sudo sed -i 's/XKBLAYOUT=".*"/XKBLAYOUT="fr"/' /etc/default/keyboard
+
+# Update the system
+sudo apt update -y && sudo apt upgrade -y
+
+# Change the current hostname
+hostnamectl set-hostname ${HOSTNAME}
+
+##################################
+### NETWORK CONFIGURATION PART ###
+##################################
+
+# Set dhcp ip address
+sudo bash -c "cat << 'EOF' > /etc/netplan/01-enp2s0.yaml
+network:
+  version: 2
+  ethernets:
+    ${NET_INTERFACE}:
+      dhcp4: true
+EOF"
+
+# Change 01-enp2s0.yaml accessibility
+sudo chmod 600 /etc/netplan/01-enp2s0.yaml
+
+# Apply changes
+sudo netplan apply
+
+############################################
+### MONITORING-CLIENT CONFIGURATION PART ###
+############################################
+
+# Download node_exporter archive to /tmp
+cd /tmp && wget https://github.com/prometheus/node_exporter/releases/download/v1.6.1/node_exporter-1.6.1.linux-amd64.tar.gz
+
+# Extract the archive
+tar xvf node_exporter-1.6.1.linux-amd64.tar.gz
+
+# Move the node_exporter binary to a system-wide location
+sudo mv node_exporter-1.6.1.linux-amd64/node_exporter /usr/local/bin/
+
+# Create a dedicated non-login system user for security
+sudo useradd -rs /bin/false node_exporter
+
+# Create systemd service file (no nano, written inline)
+sudo tee /etc/systemd/system/node_exporter.service >/dev/null <<'EOF'
+[Unit]
+Description=Node Exporter
+After=network.target
+
+[Service]
+User=node_exporter
+ExecStart=/usr/local/bin/node_exporter
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Reload systemd to pick up the new service
+sudo systemctl daemon-reload
+
+# Enable node_exporter at boot and start it immediately
+sudo systemctl enable --now node_exporter
+
+# Verify node_exporter is exposing metrics locally
+# You should see Prometheus-style metrics output
+curl http://localhost:9100/metrics
