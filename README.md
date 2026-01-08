@@ -2,10 +2,10 @@
 
 [![Contributors](https://img.shields.io/badge/CONTRIBUTORS-02-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/graphs/contributors)
 [![Forks](https://img.shields.io/badge/FORKS-00-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/network/members)
-[![Stargazers](https://img.shields.io/badge/STARS-01-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/stargazers)
+[![Stargazers](https://img.shields.io/badge/STARS-02-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/stargazers)
 [![Issues](https://img.shields.io/badge/ISSUES-00-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/issues)
 [![GPL License](https://img.shields.io/badge/LICENSE-GPL-blue?style=plastic)](LICENSE)
-[![Linkedin](https://img.shields.io/badge/Linkedin-6.3k-blue?style=plastic)](https://www.linkedin.com/in/zouari-omar-143239283)
+[![Linkedin](https://img.shields.io/badge/Linkedin-6.4k-blue?style=plastic)](https://www.linkedin.com/in/zouari-omar-143239283)
 
 <h1 align="center">
   <a href="http://www.amitmerchant.com/electron-markdownify"><img src="img/CORE/sarl.png" alt="SARL" width="600"></a>
@@ -63,6 +63,7 @@ Before you begin, make sure you have the following software installed:
 - Cisco Router ([Cisco 3725](https://drive.google.com/file/d/1Q8i5ApabSRYu0QCmtyK2NzcmUWKuiWMD/view?usp=drive_link))
 - Cisco Router ([Cisco 3745](https://drive.google.com/file/d/1Aw1Kooz-INVcbFek9yOc4cGsgFE2oO6H/view?usp=drive_link))
 - Linux Server ([QEMU-linux-ubuntu-server-20.04](https://cloud-images.ubuntu.com/releases/focal/release))
+- Linux Server ([QEMU-linux-ubuntu-server-24.04.3](https://cloud-images.ubuntu.com/releases/focal/release))
 
 ### Setup the project
 
