@@ -13,6 +13,8 @@
 \usepackage{enumitem}
 \usepackage{tcolorbox}
 \usepackage{tabularx}
+\usepackage{listings}
+\usepackage{float}
 
 \geometry{margin=1in}
 \setlength{\headheight}{15pt}
@@ -33,6 +35,22 @@
 \titleformat{\subsection}
   {\large\bfseries\color{accent}}
   {\thesubsection}{1em}{}
+
+\lstdefinestyle{corp}{
+  backgroundcolor=\color{soft},
+  basicstyle=\ttfamily\small,
+  frame=single,
+  rulecolor=\color{slate},
+  keywordstyle=\color{accent}\bfseries,
+  commentstyle=\color{gray},
+  stringstyle=\color{blue},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  breaklines=true,
+  showstringspaces=false,
+  tabsize=2,
+  captionpos=b
+}
 
 % -------------------------------------------------------------
 % HEADER / FOOTER
@@ -216,17 +234,380 @@ Security policies were applied on multiple layers:
 \newpage
 
 % -------------------------------------------------------------
-% 7. CONCLUSION
+% 6. BACKBONE INFRASTRUCTURE
+% -------------------------------------------------------------
+\section{Backbone Infrastructure}
+
+\begin{center}
+\includegraphics[width=\linewidth]{../../img/CORE/backbone.png}
+\end{center}
+
+\subsection{Purpose}
+
+The backbone provides high-availability routed connectivity between all departments,
+the Internet, and security services. It ensures redundancy, dynamic routing,
+and controlled external access.
+
+\subsection{Architecture Overview}
+
+The backbone consists of:
+\begin{itemize}
+  \item Four core routers (CR1–CR4)
+  \item OSPF dynamic routing
+  \item FortiGate firewall (VPN + filtering)
+  \item Internet edge router with NAT
+\end{itemize}
+
+\subsection{OSPF Design}
+
+\begin{itemize}
+  \item OSPF Area 0 (Backbone)
+  \item All core routers participate in Area 0
+  \item Point-to-point links between core routers
+  \item Route summarization applied toward distribution routers
+\end{itemize}
+
+\subsection{VPN and Security}
+
+\begin{itemize}
+  \item FortiGate provides site-to-site and remote-access VPN
+  \item Encrypted tunnels secure management and inter-site traffic
+  \item Firewall policies restrict inbound/outbound traffic
+\end{itemize}
+
+\subsection{Internet Router (NAT)}
+
+\begin{itemize}
+  \item Static default route toward ISP
+  \item PAT (NAT overload) for internal subnets
+  \item Controlled port forwarding for public services
+\end{itemize}
+
+\subsection{Screenshots}
+
+\subsubsection{Backbone - OSPF Protocol}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\linewidth]{../../img/CONFIGS/backbone-ospf.png}
+\caption{OSPF Active On Backbone}
+\label{fig:ri-router-cli}
+\end{figure}
+
+
+% -------------------------------------------------------------
+% 7. NFS DEPARTMENT
+% -------------------------------------------------------------
+\section{NFS Department}
+
+\begin{center}
+\includegraphics[width=\linewidth]{../../img/CORE/nfs-zone.png}
+\end{center}
+
+\subsection{Purpose}
+
+This department provides centralized file sharing services
+for internal collaboration and data exchange.
+
+\subsection{Architecture}
+
+\begin{itemize}
+  \item Linux NFS Server (Ubuntu Server)
+  \item Client workstations
+  \item Dedicated router and access switch
+\end{itemize}
+
+\subsection{Server Configuration Overview}
+
+\begin{itemize}
+  \item NFS service enabled
+  \item Shared directories defined in \texttt{/etc/exports}
+  \item Access restricted to internal subnets
+\end{itemize}
+
+\subsection{Client Configuration Script Overview}
+
+Clients mount shared directories automatically at boot using:
+\begin{itemize}
+  \item \texttt{mount -t nfs}
+  \item \texttt{/etc/fstab}
+\end{itemize}
+
+\subsection{Router Script Overview}
+
+\begin{itemize}
+  \item Interface IP configuration
+  \item OSPF advertisement
+  \item ACL allowing NFS traffic only
+\end{itemize}
+
+\subsection{Switch Script Overview}
+
+\begin{itemize}
+  \item VLAN assignment
+  \item Access ports for clients
+  \item Trunk port toward router
+\end{itemize}
+
+\subsection{Scripts and Configuration}
+
+\subsubsection{NFS Router Configuration}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={NFS Router Configuration},
+  label={lst:nfs-server}
+]{../../project/config/r_nfs_startup.cfg}
+
+\subsubsection{NFS Server Script}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={NFS Server Configuration Script},
+  label={lst:nfs-server}
+]{../../project/scripts/nfs_server_conf}
+
+
+\subsubsection{NFS Client Script}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={NFS Client Configuration Script},
+  label={lst:nfs-server}
+]{../../project/scripts/nfs_client_conf}
+
+\subsection{Screenshots}
+
+\subsubsection{NFS Test}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\linewidth]{../../img/CORE/nfs_test.png}
+\caption{NFS Test On `/srv/nfs/share`}
+\label{fig:nfs-server-cli}
+\end{figure}
+
+% -------------------------------------------------------------
+% 8. DATABASE DEPARTMENT
+% -------------------------------------------------------------
+\section{Database Department}
+
+\begin{center}
+\includegraphics[width=\linewidth]{../../img/CORE/db-zone.png}
+\end{center}
+
+\subsection{Purpose}
+
+This department hosts the enterprise MySQL database,
+centralizing business and client data securely.
+
+\subsection{Architecture}
+
+\begin{itemize}
+  \item Linux Database Server
+  \item MySQL service
+  \item Restricted client access
+\end{itemize}
+
+\subsection{MySQL Configuration}
+
+\begin{itemize}
+  \item MySQL bound to internal interface only
+  \item Dedicated database users per service
+  \item Regular backups scheduled
+\end{itemize}
+
+\subsection{Security}
+
+\begin{itemize}
+  \item ACLs limiting database access
+  \item Strong authentication
+  \item Network isolation via VLAN
+\end{itemize}
+
+
+\subsection{Scripts and Configuration}
+
+\subsubsection{Database Router Configuration}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={DB Router Configuration},
+  label={lst:nfs-server}
+]{../../project/config/r_db_startup.cfg}
+
+\subsubsection{Database Server Script}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={DB Server Configuration Script},
+  label={lst:nfs-server}
+]{../../project/scripts/db_server_conf}
+
+
+\subsubsection{Database Client Script}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={DB Client Configuration Script},
+  label={lst:nfs-server}
+]{../../project/scripts/db_client_conf}
+
+% -------------------------------------------------------------
+% 9. WEB DEPARTMENT
+% -------------------------------------------------------------
+\section{Web Department}
+
+\begin{center}
+\includegraphics[width=\linewidth]{../../img/CORE/web-zone.png}
+\end{center}
+
+\subsection{Purpose}
+
+Hosts the public-facing enterprise website and internal web services.
+
+\subsection{Architecture}
+
+\begin{itemize}
+  \item Linux Web Server
+  \item Apache2 HTTP server
+  \item Client workstations
+\end{itemize}
+
+\subsection{Apache2 Configuration}
+
+\begin{itemize}
+  \item Virtual hosts enabled
+  \item Static and dynamic content support
+  \item Logs stored for auditing
+\end{itemize}
+
+\subsection{Router and Security}
+
+\begin{itemize}
+  \item Port forwarding via NAT
+  \item ACLs permitting HTTP/HTTPS
+  \item OSPF routing integration
+\end{itemize}
+
+\subsection{Scripts and Configuration}
+
+\subsubsection{Web Router Configuration}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={Web Router Configuration},
+  label={lst:nfs-server}
+]{../../project/config/r_web_startup.cfg}
+
+\subsubsection{Web Server Script}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={Web Server Configuration Script},
+  label={lst:nfs-server}
+]{../../project/scripts/web_server_conf}
+
+
+\subsubsection{Web Client Script}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={Web Client Configuration Script},
+  label={lst:nfs-server}
+]{../../project/scripts/web_client_conf}
+
+
+% -------------------------------------------------------------
+% 10. MONITORING DEPARTMENT
+% -------------------------------------------------------------
+\section{Monitoring Department}
+
+\begin{center}
+\includegraphics[width=\linewidth]{../../img/CORE/monitoring-zone.png}
+\end{center}
+
+\subsection{Purpose}
+
+Provides real-time monitoring, metrics collection,
+and visualization of the entire infrastructure.
+
+\subsection{Architecture}
+
+\begin{itemize}
+  \item Linux Monitoring Server
+  \item Prometheus for metrics collection
+  \item Grafana for visualization
+\end{itemize}
+
+\subsection{Prometheus}
+
+\begin{itemize}
+  \item Scrapes routers and servers
+  \item Node exporter installed on Linux hosts
+  \item Custom alert rules defined
+\end{itemize}
+
+\subsection{Grafana}
+
+\begin{itemize}
+  \item Dashboards for CPU, RAM, network usage
+  \item Role-based access control
+  \item Historical data analysis
+\end{itemize}
+
+\subsection{Screenshots}
+
+\subsubsection{Prometheus Web Interface}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\linewidth]{../../img/CONFIGS/prometheus-web-interface.png}
+\caption{Prometheus Web Interface Showing Active Targets}
+\label{fig:prometheus-ui}
+\end{figure}
+
+\subsubsection{Grafana Dashboard}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\linewidth]{../../img/CONFIGS/grafana-dashboard.png}
+\caption{Grafana Node Exporter Dashboard (ID: 1860)}
+\label{fig:grafana-dashboard}
+\end{figure}
+
+% -------------------------------------------------------------
+% 11. CONCLUSION
 % -------------------------------------------------------------
 \section{Conclusion}
 
 This document summarizes the complete network architecture for Tech Solutions (SARL).  
 The simulated environment provides a realistic, scalable, and secure platform for training, experimentation, and enterprise design validation.
 
-\vfill
+\clearpage
+\thispagestyle{empty}
+
+\vspace*{\fill}
 
 \begin{center}
 \textbf{End of Report}
+
+\vspace{0.6cm}
+
+\small
+© \the\year\ Tech Solutions (SARL)\\
+All rights reserved.
 \end{center}
+
+\vspace*{\fill}
 
 \end{document}
