@@ -283,6 +283,18 @@ The backbone consists of:
   \item Controlled port forwarding for public services
 \end{itemize}
 
+\subsection{Screenshots}
+
+\subsubsection{Backbone - OSPF Protocol}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\linewidth]{../../img/CONFIGS/backbone-ospf.png}
+\caption{OSPF Active On Backbone}
+\label{fig:ri-router-cli}
+\end{figure}
+
+
 % -------------------------------------------------------------
 % 7. NFS DEPARTMENT
 % -------------------------------------------------------------
@@ -366,6 +378,17 @@ Clients mount shared directories automatically at boot using:
   caption={NFS Client Configuration Script},
   label={lst:nfs-server}
 ]{../../project/scripts/nfs_client_conf}
+
+\subsection{Screenshots}
+
+\subsubsection{NFS Test}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\linewidth]{../../img/CORE/nfs_test.png}
+\caption{NFS Test On `/srv/nfs/share`}
+\label{fig:nfs-server-cli}
+\end{figure}
 
 % -------------------------------------------------------------
 % 8. DATABASE DEPARTMENT
@@ -472,6 +495,37 @@ Hosts the public-facing enterprise website and internal web services.
   \item ACLs permitting HTTP/HTTPS
   \item OSPF routing integration
 \end{itemize}
+
+\subsection{Scripts and Configuration}
+
+\subsubsection{Web Router Configuration}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={Web Router Configuration},
+  label={lst:nfs-server}
+]{../../project/config/r_web_startup.cfg}
+
+\subsubsection{Web Server Script}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={Web Server Configuration Script},
+  label={lst:nfs-server}
+]{../../project/scripts/web_server_conf}
+
+
+\subsubsection{Web Client Script}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={Web Client Configuration Script},
+  label={lst:nfs-server}
+]{../../project/scripts/web_client_conf}
+
 
 % -------------------------------------------------------------
 % 10. MONITORING DEPARTMENT
