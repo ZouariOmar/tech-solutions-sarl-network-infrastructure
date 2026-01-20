@@ -69,7 +69,7 @@
     \centering
 
     \vspace*{2cm}
-    \includegraphics[width=0.55\linewidth]{../../img/CORE/sarl.png}
+    \includegraphics[width=0.55\linewidth]{../../../res/img/CORE/sarl.png}
 
     \vfill
 
@@ -153,7 +153,7 @@ Partage / Collaboration & RZ-4 & NFS Server & 165 & Enables internal file and do
 \subsection{Subnetting (VLSM) Diagram}
 
 \begin{center}
-\includegraphics[width=\linewidth]{../../img/CORE/sarl-vlsm.png}
+\includegraphics[width=\linewidth]{../../../res/img/CORE/sarl-vlsm.png}
 \end{center}
 
 
@@ -183,7 +183,7 @@ Partage / Collaboration & RZ-4 & NFS Server & 165 & Enables internal file and do
 \section{Architecture Design}
 
 \begin{center}
-\includegraphics[width=\linewidth]{../../img/CORE/tech-solutions-sarl-network-infrastructure.png}
+\includegraphics[width=\linewidth]{../../../res/img/CORE/tech-solutions-sarl-network-infrastructure.png}
 \end{center}
 
 \subsection{Core Layer}
@@ -239,7 +239,7 @@ Security policies were applied on multiple layers:
 \section{Backbone Infrastructure}
 
 \begin{center}
-\includegraphics[width=\linewidth]{../../img/CORE/backbone.png}
+\includegraphics[width=\linewidth]{../../../res/img/CORE/backbone.png}
 \end{center}
 
 \subsection{Purpose}
@@ -283,13 +283,42 @@ The backbone consists of:
   \item Controlled port forwarding for public services
 \end{itemize}
 
+\subsection{Configuration}
+
+\subsubsection{Backbone routers configuration}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={Backbone Routers Configuration},
+  label={lst:backbone-routers}
+]{../../../project/config/backbone_startup.cfg}
+
+\subsubsection{NFS router VPN configuration}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={R-NFS VPN configuration},
+  label={lst:NFS-router}
+]{../../../project/config/vpn_nfs_to_rz4.cfg}
+
+\subsubsection{Backbone router VPN configuration}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={RZ4 VPN configuration},
+  label={lst:RZ4-router}
+]{../../../project/config/vpn_rz4_to_nfs.cfg}
+
 \subsection{Screenshots}
 
 \subsubsection{Backbone - OSPF Protocol}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\linewidth]{../../img/CONFIGS/backbone-ospf.png}
+\includegraphics[width=0.9\linewidth]{../../../res/img/CONFIGS/backbone-ospf.png}
 \caption{OSPF Active On Backbone}
 \label{fig:ri-router-cli}
 \end{figure}
@@ -301,7 +330,7 @@ The backbone consists of:
 \section{NFS Department}
 
 \begin{center}
-\includegraphics[width=\linewidth]{../../img/CORE/nfs-zone.png}
+\includegraphics[width=\linewidth]{../../../res/img/CORE/nfs-zone.png}
 \end{center}
 
 \subsection{Purpose}
@@ -358,7 +387,7 @@ Clients mount shared directories automatically at boot using:
   language=bash,
   caption={NFS Router Configuration},
   label={lst:nfs-server}
-]{../../project/config/r_nfs_startup.cfg}
+]{../../../project/config/r_nfs_startup.cfg}
 
 \subsubsection{NFS Server Script}
 
@@ -367,7 +396,7 @@ Clients mount shared directories automatically at boot using:
   language=bash,
   caption={NFS Server Configuration Script},
   label={lst:nfs-server}
-]{../../project/scripts/nfs_server_conf}
+]{../../../project/scripts/nfs_server_conf}
 
 
 \subsubsection{NFS Client Script}
@@ -377,7 +406,7 @@ Clients mount shared directories automatically at boot using:
   language=bash,
   caption={NFS Client Configuration Script},
   label={lst:nfs-server}
-]{../../project/scripts/nfs_client_conf}
+]{../../../project/scripts/nfs_client_conf}
 
 \subsection{Screenshots}
 
@@ -385,7 +414,7 @@ Clients mount shared directories automatically at boot using:
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\linewidth]{../../img/CORE/nfs_test.png}
+\includegraphics[width=0.9\linewidth]{../../../res/img/CORE/nfs_test.png}
 \caption{NFS Test On `/srv/nfs/share`}
 \label{fig:nfs-server-cli}
 \end{figure}
@@ -396,7 +425,7 @@ Clients mount shared directories automatically at boot using:
 \section{Database Department}
 
 \begin{center}
-\includegraphics[width=\linewidth]{../../img/CORE/db-zone.png}
+\includegraphics[width=\linewidth]{../../../res/img/CORE/db-zone.png}
 \end{center}
 
 \subsection{Purpose}
@@ -437,8 +466,8 @@ centralizing business and client data securely.
   style=corp,
   language=bash,
   caption={DB Router Configuration},
-  label={lst:nfs-server}
-]{../../project/config/r_db_startup.cfg}
+  label={lst:db-router}
+]{../../../project/config/r_db_startup.cfg}
 
 \subsubsection{Database Server Script}
 
@@ -446,8 +475,8 @@ centralizing business and client data securely.
   style=corp,
   language=bash,
   caption={DB Server Configuration Script},
-  label={lst:nfs-server}
-]{../../project/scripts/db_server_conf}
+  label={lst:db-server}
+]{../../../project/scripts/db_server_conf}
 
 
 \subsubsection{Database Client Script}
@@ -456,8 +485,8 @@ centralizing business and client data securely.
   style=corp,
   language=bash,
   caption={DB Client Configuration Script},
-  label={lst:nfs-server}
-]{../../project/scripts/db_client_conf}
+  label={lst:db-client}
+]{../../../project/scripts/db_client_conf}
 
 % -------------------------------------------------------------
 % 9. WEB DEPARTMENT
@@ -465,7 +494,7 @@ centralizing business and client data securely.
 \section{Web Department}
 
 \begin{center}
-\includegraphics[width=\linewidth]{../../img/CORE/web-zone.png}
+\includegraphics[width=\linewidth]{../../../res/img/CORE/web-zone.png}
 \end{center}
 
 \subsection{Purpose}
@@ -504,8 +533,8 @@ Hosts the public-facing enterprise website and internal web services.
   style=corp,
   language=bash,
   caption={Web Router Configuration},
-  label={lst:nfs-server}
-]{../../project/config/r_web_startup.cfg}
+  label={lst:web-router}
+]{../../../project/config/r_web_startup.cfg}
 
 \subsubsection{Web Server Script}
 
@@ -513,8 +542,8 @@ Hosts the public-facing enterprise website and internal web services.
   style=corp,
   language=bash,
   caption={Web Server Configuration Script},
-  label={lst:nfs-server}
-]{../../project/scripts/web_server_conf}
+  label={lst:web-server}
+]{../../../project/scripts/web_server_conf}
 
 
 \subsubsection{Web Client Script}
@@ -524,7 +553,18 @@ Hosts the public-facing enterprise website and internal web services.
   language=bash,
   caption={Web Client Configuration Script},
   label={lst:nfs-server}
-]{../../project/scripts/web_client_conf}
+]{../../../project/scripts/web_client_conf}
+
+\subsection{Screenshots}
+
+\subsubsection{Web Client Interface}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\linewidth]{../../../res/img/CONFIGS/web-client-employee-php-page.png}
+\caption{Client that access to `employee.php` page}
+\label{fig:web-client-ui}
+\end{figure}
 
 
 % -------------------------------------------------------------
@@ -533,7 +573,7 @@ Hosts the public-facing enterprise website and internal web services.
 \section{Monitoring Department}
 
 \begin{center}
-\includegraphics[width=\linewidth]{../../img/CORE/monitoring-zone.png}
+\includegraphics[width=\linewidth]{../../../res/img/CORE/monitoring-zone.png}
 \end{center}
 
 \subsection{Purpose}
@@ -565,13 +605,44 @@ and visualization of the entire infrastructure.
   \item Historical data analysis
 \end{itemize}
 
+\subsection{Scripts and Configuration}
+
+\subsubsection{Monitoring Router Configuration}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={Monitoring Router Configuration},
+  label={lst:monitoring-router}
+]{../../../project/config/r_monitoring_startup.cfg}
+
+\subsubsection{Monitoring Server Script}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={Monitoring Server Configuration Script},
+  label={lst:monitoring-server}
+]{../../../project/scripts/monitoring_server_conf}
+
+
+\subsubsection{Monitoring Client Script}
+
+\lstinputlisting[
+  style=corp,
+  language=bash,
+  caption={Monitoring Client Configuration Script},
+  label={lst:monitoring-client}
+]{../../../project/scripts/monitoring_client_conf}
+
+
 \subsection{Screenshots}
 
 \subsubsection{Prometheus Web Interface}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\linewidth]{../../img/CONFIGS/prometheus-web-interface.png}
+\includegraphics[width=0.9\linewidth]{../../../res/img/CONFIGS/prometheus-web-interface.png}
 \caption{Prometheus Web Interface Showing Active Targets}
 \label{fig:prometheus-ui}
 \end{figure}
@@ -580,7 +651,7 @@ and visualization of the entire infrastructure.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\linewidth]{../../img/CONFIGS/grafana-dashboard.png}
+\includegraphics[width=0.9\linewidth]{../../../res/img/CONFIGS/grafana-dashboard.png}
 \caption{Grafana Node Exporter Dashboard (ID: 1860)}
 \label{fig:grafana-dashboard}
 \end{figure}
