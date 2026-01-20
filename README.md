@@ -2,13 +2,13 @@
 
 [![Contributors](https://img.shields.io/badge/CONTRIBUTORS-02-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/graphs/contributors)
 [![Forks](https://img.shields.io/badge/FORKS-00-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/network/members)
-[![Stargazers](https://img.shields.io/badge/STARS-02-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/stargazers)
+[![Stargazers](https://img.shields.io/badge/STARS-04-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/stargazers)
 [![Issues](https://img.shields.io/badge/ISSUES-00-blue?style=plastic)](https://github.com/ZouariOmar/tech-solutions-sarl-network-infrastructure/issues)
-[![GPL License](https://img.shields.io/badge/LICENSE-GPL-blue?style=plastic)](LICENSE)
-[![Linkedin](https://img.shields.io/badge/Linkedin-6.4k-blue?style=plastic)](https://www.linkedin.com/in/zouari-omar-143239283)
+[![GPL3.0 License](https://img.shields.io/badge/LICENSE-GPL3.0-blue?style=plastic)](LICENSE)
+[![Linkedin](https://img.shields.io/badge/Linkedin-6.5k-blue?style=plastic)](https://www.linkedin.com/in/zouari-omar-143239283)
 
 <h1 align="center">
-  <a href="http://www.amitmerchant.com/electron-markdownify"><img src="img/CORE/sarl.png" alt="SARL" width="600"></a>
+  <a href="http://www.amitmerchant.com/electron-markdownify"><img src="res/img/CORE/sarl.png" alt="SARL" width="600"></a>
   <br>
   Tech Solutions (SARL) Network Infrastructure
 </h1>
@@ -37,7 +37,7 @@
   <a href="#contact">Contact</a>
 </p>
 
-<p align="center"> <img src="img/CORE/tech-solutions-sarl-network-infrastructure.png"></img> </p>
+<p align="center"> <img src="res/img/CORE/tech-solutions-sarl-network-infrastructure.png"></img> </p>
 
 ## Project Overview
 
@@ -99,4 +99,4 @@ For questions or suggestions, feel free to reach out:
 - **Email**: [zouariomar20@gmail.com](mailto:zouariomar20@gmail.com)
 - **LinkedIn**: [Zouari Omar](https://www.linkedin.com/in/zouari-omar-143239283)
 
-**Happy Coding!**
+> Happy Coding!
